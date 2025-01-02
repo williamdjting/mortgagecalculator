@@ -1,21 +1,30 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+
 const basicRoutes = require('./routes/basic');
 
 
 const app = express();
 
-// Middleware to handle form-encoded data
+
+// for front end and back end server communication
+app.use(cors());
+
+// middleware to handle form-encoded data
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Middleware to handle JSON (still supported)
+// middleware to handle JSON
 app.use(bodyParser.json());
 
-// Mount routes
-app.use('/basic', basicRoutes);       // Prefix for basic operations
+// middle ware to handle JSON
+app.use(express.json());
 
 
-// Start the server
+// mount routes
+app.use('/basic', basicRoutes);     
+
+// start the server
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

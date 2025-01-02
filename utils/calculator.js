@@ -3,7 +3,7 @@ function mortgagePaymentPerPaymentScheduleCalculator(principal, interest_rate, n
     // r = interest rate (per period)
     // n = number of payments
 
-    // Convert interest_rate from percentage to decimal
+    // convert interest_rate from percentage to decimal
     // make payments monthly
     const rate = ( interest_rate / 100 ) / 12;
 
@@ -17,7 +17,7 @@ function mortgagePaymentPerPaymentScheduleCalculator(principal, interest_rate, n
 
     const mortgagePaymentPerPaymentSchedule = (principal * numerator) / denominator;
 
-    console.log("rate", rate);
+    console.log("monthly interest rate", rate);
     console.log("onePlusR", onePlusR);
     console.log("onePlusRSquaredByN", onePlusRSquaredByN);
     console.log("numerator", numerator);

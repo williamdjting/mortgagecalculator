@@ -5,14 +5,13 @@ const router = express.Router();
 const { mortgagePaymentPerPaymentScheduleCalculator } = require('../utils/calculator');
 
 
-
 // mortgage payment route
 router.post('/payment', (req, res) => {
     console.log("Request Body:", req.body); // Log the incoming request payload
-    const { principal, interest_rate, number_of_payments } = req.body;
+    const { principal, interest_rate, number_of_payments, amortization_period, payment_schedule } = req.body;
 
 
-    // Error checking
+    // error checking
     if (!principal || isNaN(principal) || principal <= 0) {
         return res.status(400).json({ error: "Principal must be a positive number." });
     }
@@ -25,15 +24,20 @@ router.post('/payment', (req, res) => {
         return res.status(400).json({ error: "Number of payments must be a positive integer." });
     }
 
-    try {
-        // Calculate the mortgage payment
-        const result = mortgagePaymentPerPaymentScheduleCalculator(principal, interest_rate, number_of_payments);
+    const result = mortgagePaymentPerPaymentScheduleCalculator(principal, interest_rate, number_of_payments);
 
-        // Return the result
-        res.json({ result });
+
+    try {
+        // calculate the mortgage payment
+        const response = {
+            message: `Mortgage payment calculation is ${result}`
+        };
+
+        // return the result
+        res.json(response);
         
     } catch (error) {
-        // Handle unexpected errors in the calculation
+        // handle unexpected errors in the calculation
         res.status(500).json({ error: "An error occurred while calculating the mortgage payment." });
     }
 });
