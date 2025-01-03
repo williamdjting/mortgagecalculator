@@ -4,24 +4,43 @@ document
     event.preventDefault(); // prevent page reload
 
     // get input values
-    const principal = document.getElementById("principal").value;
+    const property_price = document.getElementById("property_price").value;
+    const down_payment = document.getElementById("down_payment").value;
     const interest_rate = document.getElementById("interest_rate").value;
-    const number_of_payments =
-      document.getElementById("number_of_payments").value;
-    const amortization_period = document.getElementById(
-      "amortization_period"
-    ).value;
-    const payment_schedule = document.getElementById("payment_schedule").value;
+    // const number_of_payments =
+    //   document.getElementById("number_of_payments").value;
+
+    // Get selected amortization_period and payment_schedule
+    const amortization_period = Number(
+      document.querySelector('input[name="amortization_period"]:checked')?.value
+    );
+
+    const payment_schedule = document.querySelector(
+      'input[name="payment_schedule"]:checked'
+    )?.value;
+
+    if (amortization_period) {
+      console.log("amortization_period: " + amortization_period);
+    } else {
+      console.log("No amortization period selected.");
+    }
+
+    if (payment_schedule) {
+      console.log("payment_schedule: " + payment_schedule);
+    } else {
+      console.log("No payment schedule selected.");
+    }
 
     // validate input on client side
     if (
-      !principal ||
+      !property_price ||
+      !down_payment ||
       !interest_rate ||
-      !number_of_payments ||
+      // !number_of_payments ||
       !amortization_period ||
       !payment_schedule
     ) {
-      alert("Numbers are required.");
+      alert("Entries are required.");
       return;
     }
 
@@ -33,9 +52,10 @@ document
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          principal: principal,
+          property_price: property_price,
+          down_payment: down_payment,
           interest_rate: interest_rate,
-          number_of_payments: number_of_payments,
+          // number_of_payments: number_of_payments,
           amortization_period: amortization_period,
           payment_schedule: payment_schedule,
         }),
@@ -44,7 +64,9 @@ document
       const result = await response.json();
       // surface response to client side
       // log the result to ensure the backend is returning the expected data
-      console.log(result);
+      console.log("result in script.js", result);
+      console.log("result.message in script.js", result.message);
+      console.log("result.result in script.js", result.result);
 
       // display the message and the result
       if (result.message && result.result !== undefined) {
@@ -65,4 +87,25 @@ document
       document.getElementById("response-message").innerText =
         "An error occurred.";
     }
+
+    //   if (result) {
+
+    //     document.getElementById(
+    //       "response-message"
+    //     ).innerText = `${result.message}`;
+    //   } else if (result.error) {
+
+    //     document.getElementById(
+    //       "response-message"
+    //     ).innerText = `Error: ${result.error}`;
+    //   } else {
+
+    //     document.getElementById("response-message").innerText =
+    //       "Unexpected response format.";
+    //   }
+    // } catch (error) {
+    //   console.error("Error:", error);
+    //   document.getElementById("response-message").innerText =
+    //     "An error occurred.";
+    // }
   });

@@ -3,28 +3,34 @@ function mortgagePaymentPerPaymentScheduleCalculator(principal, interest_rate, n
     // r = interest rate (per period)
     // n = number of payments
 
-    // convert interest_rate from percentage to decimal
-    // make payments monthly
-    const rate = ( interest_rate / 100 ) / 12;
+    // rate is the interest rate / 100, assuming the entered value is a whole number 
+    const rate = ( interest_rate / 100 );
 
-    const onePlusR = 1 + rate;
+    // creates the (1 + r) value
+    const onePlusRate = 1 + rate;
 
-    const onePlusRSquaredByN = onePlusR ** number_of_payments;
+    // to the power of n
+    const onePlusRateSquaredByN = onePlusRate ** number_of_payments;
 
-    const numerator = rate * onePlusRSquaredByN;
+    // the formula's numerator
+    const numerator = rate * onePlusRateSquaredByN;
 
-    const denominator = onePlusRSquaredByN - 1;
+    // the formula's denominator
+    const denominator = onePlusRateSquaredByN - 1;
 
+    // the calculation of the mortgage payments per schedule
     const mortgagePaymentPerPaymentSchedule = (principal * numerator) / denominator;
 
     console.log("monthly interest rate", rate);
-    console.log("onePlusR", onePlusR);
-    console.log("onePlusRSquaredByN", onePlusRSquaredByN);
+    console.log("onePlusRate", onePlusRate);
+    console.log("onePlusRateSquaredByN", onePlusRateSquaredByN);
     console.log("numerator", numerator);
     console.log("denominator", denominator);
     console.log("calculator.js - mortgagePaymentPerPaymentSchedule", mortgagePaymentPerPaymentSchedule);
 
-    return mortgagePaymentPerPaymentSchedule;
+    const roundedReturnValue = mortgagePaymentPerPaymentSchedule.toFixed(2); // round to two decimal
+
+    return roundedReturnValue;
 }
 
 module.exports = { mortgagePaymentPerPaymentScheduleCalculator };
