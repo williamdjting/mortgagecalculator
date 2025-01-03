@@ -1,10 +1,10 @@
-function mortgagePaymentPerPaymentScheduleCalculator(principal, interest_rate, number_of_payments) {
+function mortgagePaymentPerPaymentScheduleCalculator(principal, interest_rate, payment_schedule_num, number_of_payments) {
     // P = principal
     // r = interest rate (per period)
     // n = number of payments
 
-    // rate is the interest rate / 100, assuming the entered value is a whole number 
-    const rate = ( interest_rate / 100 );
+    // rate is the interest rate / 100, assuming the entered value is a whole number between 0 and 100
+    const rate = ( interest_rate / 100 ) / payment_schedule_num;
 
     // creates the (1 + r) value
     const onePlusRate = 1 + rate;
@@ -19,7 +19,7 @@ function mortgagePaymentPerPaymentScheduleCalculator(principal, interest_rate, n
     const denominator = onePlusRateSquaredByN - 1;
 
     // the calculation of the mortgage payments per schedule
-    const mortgagePaymentPerPaymentSchedule = (principal * numerator) / denominator;
+    const mortgagePaymentPerPaymentSchedule = principal * (numerator / denominator) ;
 
     console.log("monthly interest rate", rate);
     console.log("onePlusRate", onePlusRate);

@@ -16,12 +16,12 @@ router.post("/payment", (req, res) => {
     payment_schedule,
   } = req.body;
 
-  // parse each variable as a float for usage as number type
-  const property_price_num = parseFloat(property_price);
-  const down_payment_num = parseFloat(down_payment);
-  const interest_rate_num = parseFloat(interest_rate);
-  const amortization_period_num = parseFloat(amortization_period);
-  const payment_schedule_num = parseFloat(payment_schedule);
+  // parse each variable as a Number for usage as number type
+  const property_price_num = Number(property_price);
+  const down_payment_num = Number(down_payment);
+  const interest_rate_num = Number(interest_rate);
+  const amortization_period_num = Number(amortization_period);
+  const payment_schedule_num = Number(payment_schedule);
 
   // property_price will be entered in a range by user
   // down_payment will be entered in a range by user, cannot exceed property_price
@@ -91,6 +91,7 @@ router.post("/payment", (req, res) => {
   const result = mortgagePaymentPerPaymentScheduleCalculator(
     principal,
     interest_rate_num,
+    payment_schedule_num,
     number_of_payments
   );
 
