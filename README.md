@@ -13,6 +13,7 @@ http-server .
 will be found on one of these IP's
 
 Available on:
+  localhost:8080
   http://127.0.0.1:8080
   http://192.168.1.137:8080
   http://192.168.1.104:8080
@@ -21,5 +22,7 @@ Available on:
 this will serve index.html as the web form
 
 interact with the webform to generate results of your calculation
+
+note: the promise for the response that shows under the submit button may be in pending state depending on the IP, localhost:8080 seemed pretty good
 
 enjoy!
