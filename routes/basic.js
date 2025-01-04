@@ -175,7 +175,7 @@ router.post("/payment", (req, res) => {
     // calculate the mortgage payment
     const response = {
       result: result,
-      message: `Mortgage payment calculation is ${result}`,
+      message: `Mortgage payment per payment schedule is ${result}`,
     };
 
     console.log("response.message inside basic.js", response.message);
