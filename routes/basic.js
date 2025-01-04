@@ -12,7 +12,7 @@ const {
 
 // mortgage payment route
 router.post("/payment", (req, res) => {
-  console.log("Request Body:", req.body); 
+  console.log("Request Body:", req.body);
   // log the incoming request payload
   const {
     property_price,
@@ -43,19 +43,28 @@ router.post("/payment", (req, res) => {
   ) {
     return res
       .status(400)
-      .json({ error: "property_price must be a positive number, must exists and must be a Number" });
+      .json({
+        error:
+          "property_price must be a positive number, must exists and must be a Number",
+      });
   }
 
   if (!down_payment_num || isNaN(down_payment_num) || down_payment_num <= 0) {
     return res
       .status(400)
-      .json({ error: "down_payment must be a positive number, must exists and must be a Number" });
+      .json({
+        error:
+          "down_payment must be a positive number, must exists and must be a Number",
+      });
   }
 
   if (down_payment_num >= property_price_num) {
     return res
       .status(400)
-      .json({ error: "down_payment cannot be equal or exceed property_price, must exists and must be a Number" });
+      .json({
+        error:
+          "down_payment cannot be equal or exceed property_price, must exists and must be a Number",
+      });
   }
 
   if (
@@ -65,7 +74,8 @@ router.post("/payment", (req, res) => {
     interest_rate_num > 100
   ) {
     return res.status(400).json({
-      error: "Interest rate must be a positive number between 0 and 100, must exists and must be a Number",
+      error:
+        "Interest rate must be a positive number between 0 and 100, must exists and must be a Number",
     });
   }
 
@@ -77,7 +87,10 @@ router.post("/payment", (req, res) => {
   ) {
     return res
       .status(400)
-      .json({ error: "amortization_period must be a positive integer between 0 and 30, must exists and must be a Number" });
+      .json({
+        error:
+          "amortization_period must be a positive integer between 0 and 30, must exists and must be a Number",
+      });
   }
 
   if (
@@ -87,7 +100,10 @@ router.post("/payment", (req, res) => {
   ) {
     return res
       .status(400)
-      .json({ error: "payment_schedule must be a positive integer, must exists and must be a Number" });
+      .json({
+        error:
+          "payment_schedule must be a positive integer, must exists and must be a Number",
+      });
   }
 
   let original_principle;
@@ -95,8 +111,8 @@ router.post("/payment", (req, res) => {
   let cmhcCost = 0;
 
   if (
-    (amortization_period_num == 30) &&
-    ((down_payment_num / property_price_num )< 0.2)
+    amortization_period_num == 30 &&
+    down_payment_num / property_price_num < 0.2
   ) {
     // calculate the addition of CMHC price for 30 year amortization / first time home buyer
 
@@ -109,13 +125,20 @@ router.post("/payment", (req, res) => {
       amortization_period_num == 15 ||
       amortization_period_num == 20 ||
       amortization_period_num == 25) &&
-    ((down_payment_num / property_price_num) < 0.2)
+    down_payment_num / property_price_num < 0.2
   ) {
+    // calculate the addition of CMHC price for 5,10,15,20,25 year amortization
+
     cmhcCost = cmhcCostCalculatorNot30Year(
       property_price_num,
       down_payment_num
     );
 
+    original_principle = property_price_num - down_payment_num + cmhcCost;
+  } else if (
+    down_payment_num / property_price_num >= 0.2 &&
+    down_payment_num / property_price_num <= 1
+  ) {
     original_principle = property_price_num - down_payment_num + cmhcCost;
   } else {
     original_principle = property_price_num - down_payment_num + cmhcCost;
