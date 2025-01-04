@@ -32,7 +32,6 @@ document
       !property_price ||
       !down_payment ||
       !interest_rate ||
-      // !number_of_payments ||
       !amortization_period ||
       !payment_schedule
     ) {

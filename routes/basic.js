@@ -14,6 +14,7 @@ const {
 // mortgage payment route
 router.post("/payment", (req, res) => {
   console.log("Request Body:", req.body);
+  // 1. RETRIEVE INFORMATION FROM FRONT END
   // log the incoming request payload
   const {
     property_price,
@@ -36,7 +37,7 @@ router.post("/payment", (req, res) => {
   // original_principle is property_price - down_payment
   // number_of_payments is amortization_period * payment_schedule
 
-  // error checking
+  // 2. ERROR/TYPE CHECKING 
   if (
     !property_price_num ||
     isNaN(property_price_num) ||
@@ -105,6 +106,7 @@ router.post("/payment", (req, res) => {
     });
   }
 
+  // 3. CMHC COST CALCULATION
   let original_principle;
 
   let cmhcCost = 0;
@@ -143,6 +145,8 @@ router.post("/payment", (req, res) => {
     original_principle = property_price_num - down_payment_num + cmhcCost;
   }
 
+  // 4. MORTGAGE PAYMENT CALCULATION
+
   console.log("original principle in basic.js", original_principle);
 
   const number_of_payments = amortization_period_num * payment_schedule_num;
@@ -150,6 +154,8 @@ router.post("/payment", (req, res) => {
   let result;
 
   if (payment_schedule_num == 13) {
+
+    // 5. ACCELERATED PAYMENT CALCULATION
     result = mortgagePaymentPerPaymentScheduleCalculatorAccelerated(
       original_principle,
       interest_rate_num,
@@ -163,6 +169,8 @@ router.post("/payment", (req, res) => {
       number_of_payments
     )};
 
+
+  // 6. MORTGAGE PAYMENT RESPONSE
   try {
     // calculate the mortgage payment
     const response = {
