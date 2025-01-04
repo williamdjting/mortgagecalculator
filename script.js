@@ -48,6 +48,7 @@ document
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          // turn string data type to number data type on client side
           property_price: Number(property_price),
           down_payment: Number(down_payment),
           interest_rate: Number(interest_rate),
