@@ -34,6 +34,7 @@
     - Expected Outputs are: 
       - payment per payment schedule
       - an error if the inputs are not valid. This includes cases where the down payment is not large enough.
+    - I have kept the console.logs present on client and server side for ease of review
 
 - **To run test suite** 
 

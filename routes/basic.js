@@ -3,6 +3,7 @@ const router = express.Router();
 
 const {
   mortgagePaymentPerPaymentScheduleCalculator,
+  mortgagePaymentPerPaymentScheduleCalculatorAccelerated,
 } = require("../utils/calculator");
 
 const {
@@ -41,30 +42,32 @@ router.post("/payment", (req, res) => {
     isNaN(property_price_num) ||
     property_price_num <= 0
   ) {
-    return res
-      .status(400)
-      .json({
-        error:
-          "property_price must be a positive number, must exists and must be a Number",
-      });
+    return res.status(400).json({
+      error:
+        "property_price must be a positive number, must exists and must be a Number",
+    });
   }
 
-  if (!down_payment_num || isNaN(down_payment_num) || down_payment_num <= 0) {
-    return res
-      .status(400)
-      .json({
-        error:
-          "down_payment must be a positive number, must exists and must be a Number",
-      });
+  if (!down_payment_num || isNaN(down_payment_num) || down_payment_num < 0) {
+    return res.status(400).json({
+      error:
+        "down_payment must be a positive number, must exists and must be a Number",
+    });
+  }
+
+
+  if (down_payment_num < (property_price_num * 0.05)) {
+    return res.status(400).json({
+      error:
+        `Down payment must be at least 5% of the property price. Minimum down payment required of 5% of property price}`,
+    });
   }
 
   if (down_payment_num >= property_price_num) {
-    return res
-      .status(400)
-      .json({
-        error:
-          "down_payment cannot be equal or exceed property_price, must exists and must be a Number",
-      });
+    return res.status(400).json({
+      error:
+        "down_payment cannot be equal or exceed property_price, must exists and must be a Number",
+    });
   }
 
   if (
@@ -85,12 +88,10 @@ router.post("/payment", (req, res) => {
     amortization_period_num <= 0 ||
     amortization_period_num > 30
   ) {
-    return res
-      .status(400)
-      .json({
-        error:
-          "amortization_period must be a positive integer between 0 and 30, must exists and must be a Number",
-      });
+    return res.status(400).json({
+      error:
+        "amortization_period must be a positive integer between 0 and 30, must exists and must be a Number",
+    });
   }
 
   if (
@@ -98,12 +99,10 @@ router.post("/payment", (req, res) => {
     isNaN(payment_schedule_num) ||
     payment_schedule_num <= 0
   ) {
-    return res
-      .status(400)
-      .json({
-        error:
-          "payment_schedule must be a positive integer, must exists and must be a Number",
-      });
+    return res.status(400).json({
+      error:
+        "payment_schedule must be a positive integer, must exists and must be a Number",
+    });
   }
 
   let original_principle;
@@ -148,12 +147,21 @@ router.post("/payment", (req, res) => {
 
   const number_of_payments = amortization_period_num * payment_schedule_num;
 
-  const result = mortgagePaymentPerPaymentScheduleCalculator(
-    original_principle,
-    interest_rate_num,
-    payment_schedule_num,
-    number_of_payments
-  );
+  let result;
+
+  if (payment_schedule_num == 13) {
+    result = mortgagePaymentPerPaymentScheduleCalculatorAccelerated(
+      original_principle,
+      interest_rate_num,
+      amortization_period_num
+    );
+  } else if (payment_schedule_num == 12 || payment_schedule_num == 26) {
+    result = mortgagePaymentPerPaymentScheduleCalculator(
+      original_principle,
+      interest_rate_num,
+      payment_schedule_num,
+      number_of_payments
+    )};
 
   try {
     // calculate the mortgage payment

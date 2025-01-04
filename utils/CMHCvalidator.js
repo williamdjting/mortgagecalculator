@@ -31,9 +31,7 @@ function cmhcCostCalculator30Year(property_price_num, down_payment_num) {
     (down_payment_num / property_price_num < 1)
   ) {
     cmhcCost = 0;
-  } else {
-    console.error("No calculation of cmhcCostCalculator30Year");
-  }
+  } 
 
   console.log("chmcCostCalculator30Year", cmhcCost);
 
@@ -70,9 +68,7 @@ function cmhcCostCalculatorNot30Year(property_price_num, down_payment_num) {
     (down_payment_num / property_price_num < 1)
   ) {
     cmhcCost = 0;
-  } else {
-    console.error("No calculation of cmhcCostCalculatorNot30Year");
-  }
+  } 
 
   console.log("cmhcCostCalculatorNot30Year", cmhcCost);
 
