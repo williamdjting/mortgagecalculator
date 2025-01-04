@@ -30,7 +30,7 @@ function mortgagePaymentPerPaymentScheduleCalculator(principal, interest_rate, p
 
     const roundedReturnValue = mortgagePaymentPerPaymentSchedule.toFixed(2); // round to two decimal
 
-    return roundedReturnValue;
+    return Number(roundedReturnValue);
 }
 
 module.exports = { mortgagePaymentPerPaymentScheduleCalculator };

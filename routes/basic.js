@@ -5,9 +5,15 @@ const {
   mortgagePaymentPerPaymentScheduleCalculator,
 } = require("../utils/calculator");
 
+const {
+  cmhcCostCalculator30Year,
+  cmhcCostCalculatorNot30Year,
+} = require("../utils/CMHCvalidator");
+
 // mortgage payment route
 router.post("/payment", (req, res) => {
-  console.log("Request Body:", req.body); // Log the incoming request payload
+  console.log("Request Body:", req.body); 
+  // log the incoming request payload
   const {
     property_price,
     down_payment,
@@ -16,7 +22,7 @@ router.post("/payment", (req, res) => {
     payment_schedule,
   } = req.body;
 
-  // parse each variable as a Number for usage as number type
+  // parse each variable as a Number for usage as number type on server side (already did on client side)
   const property_price_num = Number(property_price);
   const down_payment_num = Number(down_payment);
   const interest_rate_num = Number(interest_rate);
@@ -26,7 +32,7 @@ router.post("/payment", (req, res) => {
   // property_price will be entered in a range by user
   // down_payment will be entered in a range by user, cannot exceed property_price
   // interest_rate from a data source or scraped
-  // principal is property_price - down_payment
+  // original_principle is property_price - down_payment
   // number_of_payments is amortization_period * payment_schedule
 
   // error checking
@@ -37,19 +43,19 @@ router.post("/payment", (req, res) => {
   ) {
     return res
       .status(400)
-      .json({ error: "property_price must be a positive number." });
+      .json({ error: "property_price must be a positive number, must exists and must be a Number" });
   }
 
   if (!down_payment_num || isNaN(down_payment_num) || down_payment_num <= 0) {
     return res
       .status(400)
-      .json({ error: "down_payment must be a positive number." });
+      .json({ error: "down_payment must be a positive number, must exists and must be a Number" });
   }
 
   if (down_payment_num >= property_price_num) {
     return res
       .status(400)
-      .json({ error: "down_payment cannot be equal or exceed property_price" });
+      .json({ error: "down_payment cannot be equal or exceed property_price, must exists and must be a Number" });
   }
 
   if (
@@ -59,7 +65,7 @@ router.post("/payment", (req, res) => {
     interest_rate_num > 100
   ) {
     return res.status(400).json({
-      error: "Interest rate must be a positive number between 0 and 100.",
+      error: "Interest rate must be a positive number between 0 and 100, must exists and must be a Number",
     });
   }
 
@@ -71,7 +77,7 @@ router.post("/payment", (req, res) => {
   ) {
     return res
       .status(400)
-      .json({ error: "amortization_period must be a positive integer." });
+      .json({ error: "amortization_period must be a positive integer between 0 and 30, must exists and must be a Number" });
   }
 
   if (
@@ -81,15 +87,46 @@ router.post("/payment", (req, res) => {
   ) {
     return res
       .status(400)
-      .json({ error: "payment_schedule must be a positive integer." });
+      .json({ error: "payment_schedule must be a positive integer, must exists and must be a Number" });
   }
 
-  const principal = property_price_num - down_payment_num;
+  let original_principle;
+
+  let cmhcCost = 0;
+
+  if (
+    (amortization_period_num == 30) &&
+    ((down_payment_num / property_price_num )< 0.2)
+  ) {
+    // calculate the addition of CMHC price for 30 year amortization / first time home buyer
+
+    cmhcCost = cmhcCostCalculator30Year(property_price_num, down_payment_num);
+
+    original_principle = property_price_num - down_payment_num + cmhcCost;
+  } else if (
+    (amortization_period_num == 5 ||
+      amortization_period_num == 10 ||
+      amortization_period_num == 15 ||
+      amortization_period_num == 20 ||
+      amortization_period_num == 25) &&
+    ((down_payment_num / property_price_num) < 0.2)
+  ) {
+    cmhcCost = cmhcCostCalculatorNot30Year(
+      property_price_num,
+      down_payment_num
+    );
+
+    original_principle = property_price_num - down_payment_num + cmhcCost;
+  } else {
+    original_principle = property_price_num - down_payment_num + cmhcCost;
+  }
+
+  console.log("original principle in basic.js", original_principle);
 
   const number_of_payments = amortization_period_num * payment_schedule_num;
 
   const result = mortgagePaymentPerPaymentScheduleCalculator(
-    principal,
+    original_principle,
     interest_rate_num,
     payment_schedule_num,
     number_of_payments

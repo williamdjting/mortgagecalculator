@@ -7,13 +7,9 @@ document
     const property_price = document.getElementById("property_price").value;
     const down_payment = document.getElementById("down_payment").value;
     const interest_rate = document.getElementById("interest_rate").value;
-    // const number_of_payments =
-    //   document.getElementById("number_of_payments").value;
 
-    // Get selected amortization_period and payment_schedule
-    const amortization_period = Number(
-      document.querySelector('input[name="amortization_period"]:checked')?.value
-    );
+    const amortization_period = 
+      document.querySelector('input[name="amortization_period"]:checked')?.value;
 
     const payment_schedule = document.querySelector(
       'input[name="payment_schedule"]:checked'
@@ -52,12 +48,11 @@ document
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          property_price: property_price,
-          down_payment: down_payment,
-          interest_rate: interest_rate,
-          // number_of_payments: number_of_payments,
-          amortization_period: amortization_period,
-          payment_schedule: payment_schedule,
+          property_price: Number(property_price),
+          down_payment: Number(down_payment),
+          interest_rate: Number(interest_rate),
+          amortization_period: Number(amortization_period),
+          payment_schedule: Number(payment_schedule),
         }),
       });
 
@@ -88,24 +83,4 @@ document
         "An error occurred.";
     }
 
-    //   if (result) {
-
-    //     document.getElementById(
-    //       "response-message"
-    //     ).innerText = `${result.message}`;
-    //   } else if (result.error) {
-
-    //     document.getElementById(
-    //       "response-message"
-    //     ).innerText = `Error: ${result.error}`;
-    //   } else {
-
-    //     document.getElementById("response-message").innerText =
-    //       "Unexpected response format.";
-    //   }
-    // } catch (error) {
-    //   console.error("Error:", error);
-    //   document.getElementById("response-message").innerText =
-    //     "An error occurred.";
-    // }
   });
