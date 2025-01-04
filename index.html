@@ -12,7 +12,7 @@
       form {
         display: flex;
         flex-direction: column;
-        width: 300px;
+        width: 325px;
       }
       input,
       button {
@@ -26,22 +26,14 @@
     <h1>BC Mortgage Calculator API</h1>
     <form id="data-form">
       <label for="property_price">Property Price:</label>
-      <input type="number" id="property_price" name="property_price" min="0" required />
+      <input type="number" id="property_price" name="property_price" min="1" required />
       
       <label for="down_payment">Down Payment:</label>
       <input type="number" id="down_payment" name="down_payment" min = "0" required/>
 
       <label for="interest_rate">Interest Rate:</label>
       <input type="number" id="interest_rate" name="interest_rate"  step="0.01" min="0" max="20" required />
-
-      <!-- <label for="number_of_payments">Number Of Payments:</label>
-      <input
-        type="number"
-        id="number_of_payments"
-        name="number_of_payments"
-        required
-      /> -->
-
+      <!-- Step size is 0.01 to be granular, max is 20 as historical interest rates are not above that, negative is not considered (not japan)-->
       <fieldset>
         <legend>Amortization Period:</legend>
         
@@ -70,13 +62,13 @@
         <legend>Payment Schedule:</legend>
         
         <input type="radio" id="payment_schedule_monthly" name="payment_schedule" value="12" checked/>
-        <label for="payment_schedule_monthly">Monthly</label><br />
+        <label for="payment_schedule_monthly">Monthly - 12 times/yr</label><br />
       
         <input type="radio" id="payment_schedule_bi_weekly" name="payment_schedule" value="26" />
-        <label for="payment_schedule_bi_weekly">Bi-weekly</label><br />
+        <label for="payment_schedule_bi_weekly">Bi-weekly - 26 times/yr</label><br />
       
-        <input type="radio" id="payment_schedule_accelerated_bi_weekly" name="payment_schedule" value="13" />
-        <label for="payment_schedule_accelerated_bi_weekly">Accelerated Bi-weekly</label><br />
+        <input type="radio" id="payment_schedule_accelerated_bi_weekly" name="payment_schedule" value="27" />
+        <label for="payment_schedule_accelerated_bi_weekly">Accelerated Bi-weekly - 26 times/yr</label><br />
       </fieldset>
       
       <button type="submit">Submit</button>

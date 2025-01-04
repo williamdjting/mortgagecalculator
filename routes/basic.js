@@ -153,7 +153,7 @@ router.post("/payment", (req, res) => {
 
   let result;
 
-  if (payment_schedule_num == 13) {
+  if (payment_schedule_num == 27) {
 
     // 5. ACCELERATED PAYMENT CALCULATION
     result = mortgagePaymentPerPaymentScheduleCalculatorAccelerated(
