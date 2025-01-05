@@ -181,7 +181,7 @@ router.post("/payment", (req, res) => {
     console.log("response.message inside basic.js", response.message);
 
     // return the result
-    res.json(response);
+    res.status(200).json(response);
   } catch (error) {
     // handle unexpected errors in the calculation
     res.status(500).json({
