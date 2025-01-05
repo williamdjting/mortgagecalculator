@@ -2,7 +2,7 @@ const request = require("supertest");
 const app = require("../index"); // import the Express app
 
 describe("POST /basic/payment", () => {
-  it("should return a status code of 200 and the correct result", async () => {
+  it("should return a status code of 200 and the correct result and succeed", async () => {
     // mock req.body
     const property_price = 500000;
     const down_payment = 50000;
