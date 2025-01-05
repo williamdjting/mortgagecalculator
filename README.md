@@ -23,8 +23,7 @@
     - Enjoy!
 
 - **Notes** 
-    - The promise for the response that shows under the submit button may remain in a pending state depending on the IP.
-    - `localhost:8080` tends to work reliably so preference is to use this.
+    - `localhost:8080` works reliably so preference is to use this.
     - Inputs are:
       -  property price
       -  down payment
