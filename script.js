@@ -16,18 +16,6 @@ document
       'input[name="payment_schedule"]:checked'
     )?.value;
 
-    if (amortization_period) {
-      console.log("amortization_period: " + amortization_period);
-    } else {
-      console.log("No amortization period selected.");
-    }
-
-    if (payment_schedule) {
-      console.log("payment_schedule: " + payment_schedule);
-    } else {
-      console.log("No payment schedule selected.");
-    }
-
     // validate input on client side
     if (
       !property_price ||

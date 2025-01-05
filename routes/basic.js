@@ -45,29 +45,53 @@ router.post("/payment", (req, res) => {
   ) {
     return res.status(400).json({
       error:
-        "property_price must be a positive number, must exists and must be a Number",
+        "Property price must be a positive number, must exists and must be a Number equal or greater than $1 dollars",
     });
   }
 
-  if (!down_payment_num || isNaN(down_payment_num) || down_payment_num < 0) {
+  if (isNaN(down_payment_num) || down_payment_num < 0) {
     return res.status(400).json({
       error:
-        "down_payment must be a positive number, must exists and must be a Number",
+        `Down payment must exist and cannot be less than $0 dollars`,
     });
   }
 
+  // in BC, the minimum down payment required for a home purchase varies based on the property's price: 
+  // for homes priced at $500,000 or less, a 5% down payment is required; for homes priced between $500,000 and $1 million, 
+  // the down payment is 5% of the first $500,000, plus 10% of the portion above $500,000; and for homes priced at $1 million or more, a 20% down payment is required.
 
-  if (down_payment_num < (property_price_num * 0.05)) {
+
+  // down payment requirements based on above conditions
+if (property_price_num <= 500000) {
+  // less than $500,000
+  const minDownPayment = property_price_num * 0.05;
+  if (down_payment_num < minDownPayment) {
     return res.status(400).json({
-      error:
-        `Down payment must be at least 5% of the property price. Minimum down payment required of 5% of property price`,
+      error: `Down payment must be at least 5% of the property price ($${minDownPayment.toFixed(2)})`,
     });
   }
+} else if (property_price_num <= 1000000) {
+  // between $500,000 and $1 million, down payment is 5% of first $500,000 and 10% of the remaining amount
+  const minDownPayment = 500000 * 0.05 + (property_price_num - 500000) * 0.10;
+  if (down_payment_num < minDownPayment) {
+    return res.status(400).json({
+      error: `Down payment must be at least 5% of the first $500,000 and 10% of the portion above $500,000. Minimum required is $${minDownPayment.toFixed(2)}`,
+    });
+  }
+} else {
+  // over $1 million, the down payment must be at least 20%
+  const minDownPayment = property_price_num * 0.20;
+  if (down_payment_num < minDownPayment) {
+    return res.status(400).json({
+      error: `Down payment must be at least 20% of the property price ($${minDownPayment.toFixed(2)})`,
+    });
+  }
+}
 
   if (down_payment_num >= property_price_num) {
     return res.status(400).json({
       error:
-        "down_payment cannot be equal or exceed property_price",
+        "Down payment cannot be equal or exceed property price",
     });
   }
 
@@ -87,22 +111,24 @@ router.post("/payment", (req, res) => {
     !amortization_period_num ||
     isNaN(amortization_period_num) ||
     amortization_period_num <= 0 ||
-    amortization_period_num > 30
+    amortization_period_num > 30 
+    || ![5, 10, 15, 20, 25, 30].includes(amortization_period_num)
   ) {
     return res.status(400).json({
       error:
-        "amortization_period must be a positive integer between 0 and 30, must exists and must be a Number",
+        "Amortization period must be a positive integer of either 5,10,15,20,25, must exists and must be a Number",
     });
   }
 
   if (
     !payment_schedule_num ||
     isNaN(payment_schedule_num) ||
-    payment_schedule_num <= 0
+    payment_schedule_num <= 0 ||
+    ![12, 26, 13].includes(payment_schedule_num)
   ) {
     return res.status(400).json({
       error:
-        "payment_schedule must be a positive integer, must exists and must be a Number",
+        "Payment schedule must be a positive integer, must exists and must be a Number",
     });
   }
 
@@ -120,6 +146,7 @@ router.post("/payment", (req, res) => {
     cmhcCost = cmhcCostCalculator30Year(property_price_num, down_payment_num);
 
     original_principle = property_price_num - down_payment_num + cmhcCost;
+
   } else if (
     (amortization_period_num == 5 ||
       amortization_period_num == 10 ||
