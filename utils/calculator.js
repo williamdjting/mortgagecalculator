@@ -149,5 +149,7 @@ function mortgagePaymentPerPaymentScheduleCalculatorAccelerated(original_princip
 }
 
 
-module.exports = { mortgagePaymentPerPaymentScheduleCalculator , mortgagePaymentPerPaymentScheduleCalculatorAccelerated};
+module.exports = { mortgagePaymentPerPaymentScheduleCalculator , mortgagePaymentPerPaymentScheduleCalculatorAccelerated,     mortgagePaymentPerPaymentScheduleCalculatorAcceleratedMonthly,
+    mortgagePaymentPerPaymentScheduleCalculatorAcceleratedBiweekly,
+    mortgagePaymentPerPaymentScheduleCalculatorAcceleratedAdditionalPayment};
 

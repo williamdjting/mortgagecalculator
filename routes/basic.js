@@ -79,7 +79,7 @@ router.post("/payment", (req, res) => {
   ) {
     return res.status(400).json({
       error:
-        "Interest rate must be a positive number between 0 and 20, must exists and must be a Number",
+        "Interest rate must be a positive number greater than 0 and below 20, must exists and must be a Number",
     });
   }
 
