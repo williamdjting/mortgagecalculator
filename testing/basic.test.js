@@ -35,7 +35,7 @@ describe("POST /basic/payment", () => {
     );
   });
 
-  it("should return a status code of 200 and the incorrect result and fail", async () => {
+  it("should return a status code of 200 and the incorrect result and FAILS", async () => {
     // mock req.body
     const property_price = 500000; 
     const down_payment = 50000;
