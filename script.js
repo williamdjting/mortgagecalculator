@@ -1,7 +1,8 @@
 document
   .getElementById("data-form")
   .addEventListener("submit", async function (event) {
-    event.preventDefault(); // prevent page reload
+    event.preventDefault(); 
+    // prevent page reload
 
     // get input values
     const property_price = document.getElementById("property_price").value;

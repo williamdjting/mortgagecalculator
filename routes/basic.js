@@ -31,9 +31,9 @@ router.post("/payment", (req, res) => {
   const amortization_period_num = Number(amortization_period);
   const payment_schedule_num = Number(payment_schedule);
 
-  // property_price will be entered in a range by user
-  // down_payment will be entered in a range by user, cannot exceed property_price
-  // interest_rate from a data source or scraped
+  // property_price will be entered in a range by user, cannot be below 1 dollar
+  // down_payment will be entered in a range by user, cannot exceed property_price, must be 5% of property price  
+  // interest_rate entered by user, in 0.01 increments, capped at 20 on client side, this is historical range for mortgages
   // original_principle is property_price - down_payment
   // number_of_payments is amortization_period * payment_schedule
 
@@ -41,7 +41,7 @@ router.post("/payment", (req, res) => {
   if (
     !property_price_num ||
     isNaN(property_price_num) ||
-    property_price_num <= 0
+    property_price_num < 1
   ) {
     return res.status(400).json({
       error:
@@ -60,14 +60,14 @@ router.post("/payment", (req, res) => {
   if (down_payment_num < (property_price_num * 0.05)) {
     return res.status(400).json({
       error:
-        `Down payment must be at least 5% of the property price. Minimum down payment required of 5% of property price}`,
+        `Down payment must be at least 5% of the property price. Minimum down payment required of 5% of property price`,
     });
   }
 
   if (down_payment_num >= property_price_num) {
     return res.status(400).json({
       error:
-        "down_payment cannot be equal or exceed property_price, must exists and must be a Number",
+        "down_payment cannot be equal or exceed property_price",
     });
   }
 
@@ -75,11 +75,11 @@ router.post("/payment", (req, res) => {
     !interest_rate_num ||
     isNaN(interest_rate_num) ||
     interest_rate_num <= 0 ||
-    interest_rate_num > 100
+    interest_rate_num > 20
   ) {
     return res.status(400).json({
       error:
-        "Interest rate must be a positive number between 0 and 100, must exists and must be a Number",
+        "Interest rate must be a positive number greater than 0 and below 20, must exists and must be a Number",
     });
   }
 
@@ -153,7 +153,7 @@ router.post("/payment", (req, res) => {
 
   let result;
 
-  if (payment_schedule_num == 27) {
+  if (payment_schedule_num == 13) {
 
     // 5. ACCELERATED PAYMENT CALCULATION
     result = mortgagePaymentPerPaymentScheduleCalculatorAccelerated(
@@ -181,7 +181,7 @@ router.post("/payment", (req, res) => {
     console.log("response.message inside basic.js", response.message);
 
     // return the result
-    res.json(response);
+    res.status(200).json(response);
   } catch (error) {
     // handle unexpected errors in the calculation
     res.status(500).json({

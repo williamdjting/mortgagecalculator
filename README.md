@@ -23,19 +23,28 @@
     - Enjoy!
 
 - **Notes** 
-    - The promise for the response that shows under the submit button may remain in a pending state depending on the IP.
-    - `localhost:8080` tends to work reliably so preference is to use this.
+    - `localhost:8080` works reliably so preference is to use this.
+
     - Inputs are:
       -  property price
       -  down payment
       - annual interest rate
       -  amortization period (5 year increments between 5 and 30 years)
       - payment schedule (accelerated bi-weekly, bi-weekly, monthly)
+
     - Expected Outputs are: 
       - payment per payment schedule
       - an error if the inputs are not valid. This includes cases where the down payment is not large enough.
-    - I have kept the console.logs present on client and server side for ease of review
+
+    - I have kept the console.logs present on client and server side for ease of review.
+
+    - No GET routes were created as there is nothing to get from the server / database nor was saving or storing of data mentioned in the requirements.
+
+    - Front End is served by the HTTP Server and not a GET route.
 
 - **To run test suite** 
+    - decided to use JEST as the testing framework. to begin, install `npm install --save-dev jest`.
 
+    - to send HTTP requests to express API during testing, install `npm install --save-dev supertest`.
 
+    - to run all the tests, please use `npm test`.
