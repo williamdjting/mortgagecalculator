@@ -1,4 +1,6 @@
-// utils/validator.js
+// NOT BEING USED
+
+// utils/validatorMortgageData.js
 function validateMortgageData(
     property_price_num,
     down_payment_num,

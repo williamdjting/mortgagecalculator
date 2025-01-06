@@ -22,6 +22,13 @@
 
     - Enjoy!
 
+- **App Requirements**
+    - App must take in values and produce either a mortgage payment calculation per payment schedule or errors showing invalid inputted values.
+    
+    - Calculator API must include CMHC insurance calculation, BC Downpayment requirements, inclusion of Accelerated Biweekly payment calculation.     
+
+    - App must have a front end built with html and JS and a back end Node / Express server
+
 - **Notes** 
     - `localhost:8080` works reliably so preference is to use this.
 
@@ -43,7 +50,7 @@
     - Front End is served by the HTTP Server and not a GET route.
 
 - **To run test suite** 
-    - decided to use JEST as the testing framework. to begin, install `npm install --save-dev jest`.
+    - JEST is the testing framework. to use - install `npm install --save-dev jest`.
 
     - to send HTTP requests to express API during testing, install `npm install --save-dev supertest`.
 

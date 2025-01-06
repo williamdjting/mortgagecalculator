@@ -11,7 +11,7 @@ const {
   cmhcCostCalculatorNot30Year,
 } = require("../utils/CMHCvalidator");
 
-const { validateMortgageData } = require("../utils/validateMortgageData"); // Import the validation function
+// const { validateMortgageData } = require("../utils/validateMortgageData");
 
 // mortgage payment route
 router.post("/payment", (req, res) => {
@@ -40,6 +40,8 @@ router.post("/payment", (req, res) => {
   // number_of_payments is amortization_period * payment_schedule
 
   // 2. ERROR/TYPE CHECKING
+
+  // <---  isValid code block is not being used, validation is below  --->
   // const isValid = validateMortgageData(
   //   property_price_num,
   //   down_payment_num,
@@ -54,6 +56,7 @@ router.post("/payment", (req, res) => {
   //   console.log("Validation failed. Returning early.");
   //   return; // Exiting early to avoid further code execution.
   // }
+  // <---  isValid code block is not being used, validation is below  --->
 
   // property price validation
   if (
@@ -78,7 +81,7 @@ router.post("/payment", (req, res) => {
   // for homes priced at $500,000 or less, a 5% down payment is required; for homes priced between $500,000 and $1 million,
   // the down payment is 5% of the first $500,000, plus 10% of the portion above $500,000; and for homes priced at $1 million or more, a 20% down payment is required.
 
-  // down payment based on property price logic
+  // down payment based on above requirements
   if (property_price_num <= 500000) {
     const minDownPayment = property_price_num * 0.05;
     if (down_payment_num < minDownPayment) {
@@ -209,13 +212,14 @@ router.post("/payment", (req, res) => {
   let result;
 
   if (payment_schedule_num == 13) {
-    // 5. ACCELERATED PAYMENT CALCULATION
+    // 5. ACCELERATED BIWEEKLY PAYMENT CALCULATION
     result = mortgagePaymentPerPaymentScheduleCalculatorAccelerated(
       original_principle,
       interest_rate_num,
       amortization_period_num
     );
   } else if (payment_schedule_num == 12 || payment_schedule_num == 26) {
+    // 5. NOT ACCELERATED BIWEEKLY PAYMENT CALCULATION
     result = mortgagePaymentPerPaymentScheduleCalculator(
       original_principle,
       interest_rate_num,
